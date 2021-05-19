@@ -4,7 +4,7 @@ Although the plugin is designed to be used in Check_MK it is implemented as a NA
 
 Installation
 
-Copy the plugin to /opt/omd/sites/<site name>/local/lib/nagios/plugins folder.
+Copy the plugin to /opt/omd/sites/{SITE NAME}/local/lib/nagios/plugins folder.
 
 CLI Syntax:
 
