@@ -4,7 +4,7 @@
 __author__    = "Oliver Schlueter"
 __copyright__ = "Copyright 2020, Dell Technologies"
 __license__   = "GPL"
-__version__   = "1.0.0"
+__version__   = "1.0.1"
 __email__     = "oliver.schlueter@dell.com"
 __status__    = "Production"
 
@@ -163,7 +163,7 @@ class PowerStore():
             global powerstore_alerts
             
             url = 'https://' + hostaddress + '/api/rest/alert?select=name,severity,state,resource_name,generated_timestamp,is_acknowledged, events'
-            r = requests.get(url, verify=False, auth=(self.user, self.password))
+            r = requests.get(url, verify=False, auth=(self.user, self.password), headers = {"Range":"1-5000"})
          
             #if DEBUG:
             #    print(r, r.headers) 
@@ -242,6 +242,8 @@ class PowerStore():
     def analyse_alerts(self):
 
         self.send_request_alerts()
+
+        print("Number of Alerts: ", len(powerstore_alerts))
        
         if consider_ack_alerts:
             powerstore_alerts_Info =     [x for x in powerstore_alerts if (x['severity'] == 'Info'     and x['state'] == 'ACTIVE' )]
