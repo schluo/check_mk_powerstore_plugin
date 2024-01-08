@@ -2,9 +2,9 @@
 # encoding: utf-8
 
 __author__    = "Oliver Schlueter"
-__copyright__ = "Copyright 2020, Dell Technologies"
+__copyright__ = "Copyright 2024, Dell Technologies"
 __license__   = "GPL"
-__version__   = "1.0.1"
+__version__   = "1.0.2"
 __email__     = "oliver.schlueter@dell.com"
 __status__    = "Production"
 
@@ -89,21 +89,7 @@ def get_argument():
                                      'stats'],
                             help='Request statistics or alerts. Possible options are: alerts  | stats',
                             dest='module', required=True)
- #       parser.add_argument('-t', '--stats_type',
- #                           type=str,
- #                           choices=['appliance',
- #                                    'node',
- #                                    'volume',
- #                                    'cluster',
- #                                    'vm',
- #                                    'vg',
- #                                    'fe_fc_port',
- #                                    'fe_eth_port',
- #                                    'fe_eth_node',
- #                                    'fe_fc_node'],
- #                           help='Statistics metric type. Possible options are: appliance | node | volume | cluster | vm | vg | fe_fc_port | fe_eth_port | fe_eth_node | fe_fc_node',
- #                           dest='perfstats_type', required=False)
-                            
+
         parser.add_argument('-c', '--config', action='store_true', help='build new metric config file',required=False, dest='create_config')
         parser.add_argument('-a', '--ack', action='store_true', help='consider also acknowledged alerts',required=False, dest='consider_ack_alerts')
         args = parser.parse_args()
@@ -176,15 +162,16 @@ class PowerStore():
             # send a request and get the result string list
             global powerstore_alerts
             
-            url = 'https://' + hostaddress + '/api/rest/alert?select=name,severity,state,resource_name,generated_timestamp,is_acknowledged, events'
+            url = 'https://' + hostaddress + '/api/rest/alert?select=severity,state,resource_name,generated_timestamp,is_acknowledged, events'
             r = requests.get(url, verify=False, auth=(self.user, self.password), headers = {"Range":"1-5000"})
          
             #if DEBUG:
-            #    print(r, r.headers) 
+            #   print(r, r.headers)
          
             # prepare return to analyse
             powerstore_alerts = json.loads(r.content)
-            
+
+
         except Exception as err:
             print(timestamp + ": Not able to get health status: " + str(err))
             exit(1)
@@ -258,6 +245,7 @@ class PowerStore():
         self.send_request_alerts()
 
         print("Number of Alerts: ", len(powerstore_alerts))
+        #print(powerstore_alerts)
        
         if consider_ack_alerts:
             powerstore_alerts_Info =     [x for x in powerstore_alerts if (x['severity'] == 'Info'     and x['state'] == 'ACTIVE' )]
