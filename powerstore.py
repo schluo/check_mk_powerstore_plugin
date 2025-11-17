@@ -170,7 +170,7 @@ class PowerStore():
             powerstore_alerts = []
             url = 'https://' + hostaddress + '/api/rest/alert?select=id,state,is_acknowledged'
 
-            r = requests.get(url, verify=False, auth=(self.user, self.password), headers={"Range": "1-5000"})
+            r = requests.get(url, verify=False, auth=(self.user, self.password), headers={"Range": "0-5000"})
 
             # if DEBUG:
             #   print(r, r.headers)
@@ -185,7 +185,7 @@ class PowerStore():
                         url = 'https://' + hostaddress + '/api/rest/alert/' + alert[
                             "id"] + '?select=severity,state,resource_name,generated_timestamp,description_l10n'
                         r = requests.get(url, verify=False, auth=(self.user, self.password),
-                                         headers={"Range": "1-5000"})
+                                         headers={"Range": "0-5000"})
                         alert_details = json.loads(r.content)
                         powerstore_alerts.append(alert_details)
         except Exception as err:
